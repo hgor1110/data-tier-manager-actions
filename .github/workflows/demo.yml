@@ -1,0 +1,21 @@
+name: Demo - Data Tier Manager
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Copy Sample Config
+        run: cp sample/app_config.json .
+
+      - name: Read App Config
+        id: config
+        uses: ./actions/read-config
+
+      - name: Print Application Name
+        run: echo "App name is ${{ steps.config.outputs.app_name }}"
