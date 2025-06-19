@@ -4,18 +4,31 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  demo:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Copy Sample Config
         run: cp sample/app_config.json .
 
-      - name: Read App Config
+      - name: Read Config
         id: config
         uses: ./actions/read-config
 
-      - name: Print Application Name
-        run: echo "App name is ${{ steps.config.outputs.app_name }}"
+      - name: Fetch Metadata
+        id: fetch
+        uses: ./actions/fetch-metadata
+        with:
+          app_name: ${{ steps.config.outputs.app_name }}
+
+      - name: Generate JSON Files
+        uses: ./actions/generate-json
+        with:
+          metadata: ${{ steps.fetch.outputs.metadata }}
+
+      - name: Show Output Files
+        run: |
+          ls -l data-tier-snapshot
+          cat data-tier-snapshot/dev.json
