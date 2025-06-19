@@ -1,0 +1,8 @@
+name: "Read App Config"
+description: "Reads app_name from app_config.json"
+outputs:
+  app_name:
+    description: "The application name"
+runs:
+  using: "node16"
+  main: "index.js"
