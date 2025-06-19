@@ -1,0 +1,9 @@
+name: "Generate JSON Files"
+description: "Splits metadata into dev.json, stage.json, prod.json"
+inputs:
+  metadata:
+    required: true
+    description: "Metadata JSON from fetch-metadata"
+runs:
+  using: "node16"
+  main: "index.js"
