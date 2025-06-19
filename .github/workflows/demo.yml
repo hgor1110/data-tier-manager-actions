@@ -3,32 +3,55 @@ name: Demo - Data Tier Manager
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write   # 👈 Needed to allow push from the action
+
 jobs:
   demo:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Copy Sample Config
+      - name: Copy sample config to root (only for demo/testing)
         run: cp sample/app_config.json .
 
-      - name: Read Config
+      - name: Step 1 - Read App Config
         id: config
         uses: ./actions/read-config
 
-      - name: Fetch Metadata
+      - name: Step 2 - Fetch Table Metadata
         id: fetch
         uses: ./actions/fetch-metadata
         with:
           app_name: ${{ steps.config.outputs.app_name }}
 
-      - name: Generate JSON Files
+      - name: Step 3 - Generate JSON Files by Env
         uses: ./actions/generate-json
         with:
           metadata: ${{ steps.fetch.outputs.metadata }}
 
-      - name: Show Output Files
+      - name: Step 4 - Show Generated Files
         run: |
+          echo "🗂 Listing generated files in data-tier-snapshot/"
           ls -l data-tier-snapshot
+
+          echo "📄 Sample dev.json content:"
           cat data-tier-snapshot/dev.json
+
+      - name: Step 5 - Commit JSON files to repo
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          
+          # Stage new or modified files
+          git add data-tier-snapshot
+
+          # Commit only if there are changes
+          if ! git diff --cached --quiet; then
+            git commit -m "🧮 Add or update data-tier-snapshot JSON files"
+            git push
+          else
+            echo "ℹ️ No changes to commit."
+          fi
