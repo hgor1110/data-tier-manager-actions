@@ -3,14 +3,14 @@ const fs = require('fs');
 const path = require('path');
 
 try {
-  // Absolute path to app_config.json in the checked-out repo
-  // const configPath = path.join(process.env.GITHUB_WORKSPACE, 'app_config.json');
-  // core.info(`🔍 Looking for config at: ${configPath}`);
-
-  // const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-  // const appName = config.app_name;
-
   const environments = ['dev', 'stage', 'prod'];
+  const metadataDir = path.join(process.env.GITHUB_WORKSPACE, 'metadata');
+
+  // Create metadata folder if not exists
+  if (!fs.existsSync(metadataDir)) {
+    fs.mkdirSync(metadataDir);
+    core.info('📁 Created metadata folder');
+  }
 
   environments.forEach(env => {
     const data = [
@@ -26,9 +26,9 @@ try {
       }
     ];
 
-    const filePath = path.join(process.env.GITHUB_WORKSPACE, `${env}.json`);
+    const filePath = path.join(metadataDir, `${env}.json`);
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-    core.info(`Created ${env}.json`);
+    core.info(`✅ Created ${env}.json in metadata/`);
   });
 
 } catch (e) {
