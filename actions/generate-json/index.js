@@ -1,11 +1,17 @@
 const core = require('@actions/core');
 const fs = require('fs');
+const path = require('path');
 
 try {
-  const config = JSON.parse(fs.readFileSync('app_config.json', 'utf8'));
+  // Absolute path to app_config.json in the checked-out repo
+  const configPath = path.join(process.env.GITHUB_WORKSPACE, 'app_config.json');
+  core.info(`🔍 Looking for config at: ${configPath}`);
+
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   const appName = config.app_name;
 
   const environments = ['dev', 'stage', 'prod'];
+
   environments.forEach(env => {
     const data = [
       {
@@ -19,10 +25,12 @@ try {
         up_for_downgrade: true
       }
     ];
-    fs.writeFileSync(`${env}.json`, JSON.stringify(data, null, 2));
+
+    const filePath = path.join(process.env.GITHUB_WORKSPACE, `${env}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    core.info(`✅ Created ${env}.json`);
   });
 
-  core.info('✅ JSON files created');
 } catch (e) {
   core.setFailed(`Error: ${e.message}`);
 }
