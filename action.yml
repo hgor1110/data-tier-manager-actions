@@ -1,9 +1,7 @@
 name: "Data Tier Manager"
 description: "Composite action to generate table metadata JSON files"
-inputs: {}
-outputs: {}
 runs:
   using: "composite"
   steps:
-    - name: Generate JSON files
-      uses: ./actions/generate-json
+    - name: Generate JSON
+      uses: Veena-Vedam99/data-tier-manager-actions/actions/generate-json@main
