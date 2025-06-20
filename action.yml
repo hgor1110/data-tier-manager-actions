@@ -3,5 +3,14 @@ description: "Composite action to generate table metadata JSON files"
 runs:
   using: "composite"
   steps:
-    - name: Generate JSON
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./actions/generate-json
+
+    - name: Run generate-json action
       uses: Veena-Vedam99/data-tier-manager-actions/actions/generate-json@main
