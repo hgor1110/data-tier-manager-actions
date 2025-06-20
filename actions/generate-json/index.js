@@ -1,17 +1,10 @@
-const core = require('@actions/core');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
+const core = require('@actions/core');
+
+const environments = ['dev', 'stage', 'prod'];
 
 try {
-  const environments = ['dev', 'stage', 'prod'];
-  const metadataDir = path.join(process.env.GITHUB_WORKSPACE, 'metadata');
-
-  // Create metadata folder if not exists
-  if (!fs.existsSync(metadataDir)) {
-    fs.mkdirSync(metadataDir);
-    core.info('📁 Created metadata folder');
-  }
-
   environments.forEach(env => {
     const data = [
       {
@@ -26,11 +19,16 @@ try {
       }
     ];
 
-    const filePath = path.join(metadataDir, `${env}.json`);
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-    core.info(`✅ Created ${env}.json in metadata/`);
-  });
+    // Write files to 'metadata/' folder in user's repo
+    const outputPath = path.join(process.env.GITHUB_WORKSPACE, 'metadata');
+    if (!fs.existsSync(outputPath)) {
+      fs.mkdirSync(outputPath);
+    }
 
+    const filePath = path.join(outputPath, `${env}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    core.info(`Created ${filePath}`);
+  });
 } catch (e) {
-  core.setFailed(`Error: ${e.message}`);
+  core.setFailed(`Failed to generate JSON: ${e.message}`);
 }
