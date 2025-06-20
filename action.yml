@@ -10,6 +10,7 @@ runs:
 
     - name: Install dependencies
       run: npm install
+      shell: bash
       working-directory: ./actions/generate-json
 
     - name: Run generate-json action
