@@ -1,31 +1,29 @@
-name: "Build + Run Node Action"
-description: "Shared composite action to build and run any node action"
+name: "Build and Run Foldered GitHub Action"
+description: "Builds the given action folder (npm install + ncc) and runs the final built JS"
+
 inputs:
   folder:
+    description: "Relative path to the action folder"
     required: true
-    description: "Relative folder path (like actions/generate-json)"
-  entry:
-    required: false
-    default: "index.js"
-    description: "Entry JS file inside folder (default: index.js)"
 
 runs:
   using: "composite"
   steps:
+    - name: Checkout reusable action repo
+      uses: actions/checkout@v3
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18'
+        node-version: '20'
 
-    - name: Install dependencies from root
+    - name: Install dependencies
       run: npm install
-      shell: bash
+      working-directory: ${{ inputs.folder }}
 
-    - name: Build with NCC
-      run: |
-        npx ncc build ${{ inputs.folder }}/${{ inputs.entry }} -o ${{ inputs.folder }}/dist
-      shell: bash
+    - name: Build using ncc
+      run: npx ncc build index.js -o dist
+      working-directory: ${{ inputs.folder }}
 
     - name: Run built action
-      run: node ${{ inputs.folder }}/dist/index.js
-      shell: bash
+      uses: ./actions/generate-json/dist
