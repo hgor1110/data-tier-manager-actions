@@ -1,7 +1,33 @@
 {
   "name": "data-tier-manager-actions",
   "version": "1.0.0",
+  "description": "GitHub Actions to manage Hive table and S3 storage tiering based on usage metadata.",
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hgor1110/data-tier-manager-actions.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hgor1110/data-tier-manager-actions/issues"
+  },
+  "homepage": "https://github.com/hgor1110/data-tier-manager-actions#readme",
+  "keywords": [
+    "github-action",
+    "data-tier",
+    "s3-storage",
+    "hive-table",
+    "json-generator",
+    "metadata-management"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build-all.js"
+  },
   "dependencies": {
     "@actions/core": "^1.11.1"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.3"
   }
 }
