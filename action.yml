@@ -1,7 +1,0 @@
-name: "Data Tier Manager"
-description: "Composite action to generate table metadata JSON files"
-runs:
-  using: "composite"
-  steps:
-    - name: Run generate-json action
-      uses: hgor1110/data-tier-manager-actions/actions/generate-json@main
