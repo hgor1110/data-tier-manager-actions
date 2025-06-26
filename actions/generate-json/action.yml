@@ -1,5 +1,5 @@
-name: "Generate JSON Files"
-description: "Reads app_config.json and creates dev, stage, prod JSON files"
+name: Generate JSON Files
+description: Reads app_config.json and creates dev, stage, prod JSON files
 runs:
-  using: "node16"
-  main: "index.js"
+  using: node16
+  main: dist/index.js
