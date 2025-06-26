@@ -20,10 +20,12 @@ runs:
     - name: Install dependencies
       run: npm install
       working-directory: ${{ inputs.folder }}
+      shell: bash
 
     - name: Build using ncc
       run: npx ncc build index.js -o dist
       working-directory: ${{ inputs.folder }}
+      shell: bash
 
     - name: Run built action
       uses: ./actions/generate-json/dist
